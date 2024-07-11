@@ -61,6 +61,17 @@ const KineDetailsScreen = () => {
 
     toggleModal();
   };
+  const getCurrentDate = () => {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Mois commence à 0, donc ajoutez 1
+    const day = currentDate.getDate().toString().padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
+  
+    return formattedDate;
+  };
+  const currentDate = getCurrentDate();
+console.log(currentDate);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -88,19 +99,22 @@ const KineDetailsScreen = () => {
       kine:userData.kineId,
     };
     console.log(rendezVousData);
-
+    if(format(selectedDate, 'yyyy-MM-dd')<currentDate){
+      alert('cette date est passé');
+    }
+    else {
     // Effectuez une requête HTTP POST vers l'API
     axios
-      .post('http://192.168.1.9:8000/rendez-vous', rendezVousData)
+      .post('http://192.168.1.8:8000/rendez-vous', rendezVousData)
       .then((response) => {
         alert('Rendez-vous créé avec succès');
         // Vous pouvez effectuer des actions supplémentaires ici, comme fermer la modal
-        //navigation.navigate('RendezVousPatient');
+        navigation.navigate('RendezVousPatient');
 
       })
       .catch((error) => {
         console.error('Erreur lors de la création du rendez-vous :', error);
-      });
+      });}
   };
 
   return (
@@ -109,10 +123,10 @@ const KineDetailsScreen = () => {
         <TouchableOpacity style={styles.iconLeft}>
           <Icon name="arrow-left" size={28} color="white" onPress={handleBack} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.iconRight} onPress={handleButtonChat}>
+        <TouchableOpacity style={styles.iconRight} onPress={()=>handleButtonChat()}>
           <FontAwesome5 name="envelope" size={24} color="white" />
         </TouchableOpacity>
-        <Image source={{ uri: `http://192.168.1.9:8000/uploads/${userData.photoK}` }} style={styles.photo} />
+        <Image source={{ uri: `http://192.168.1.8:8000/uploads/${userData.photoK}` }} style={styles.photo} />
         <Text style={styles.name}>{userData.nomK} {userData.prenomK}</Text>
         <TouchableOpacity style={styles.button} onPress={toggleModal}>
           <Text style={styles.buttonText}>Prendre rendez-vous</Text>
@@ -274,7 +288,7 @@ const styles = StyleSheet.create({
     bottom: -5,
     left: 0,
     right: 20,
-    backgroundColor: '#067618',
+    backgroundColor: '#333333',
     paddingVertical: 10,
     borderRadius: 5,
     width: 200,

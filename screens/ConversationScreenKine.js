@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 
-const ConversationScreen = ({ route }) => {
+const ConversationScreenKine = ({ route }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [userData, setUserData] = useState({});
@@ -44,7 +44,7 @@ const ConversationScreen = ({ route }) => {
 
     try {
       const response = await axios.get(
-        'http://192.168.1.8:8000/conversation/' + userData.kineId + '/' + userData.userId
+        'http://192.168.1.8:8000/conversation/' + userData.userId + '/' + userData.kineId
       );
       const conversation = response.data.map((message) => ({
         id: message.id,
@@ -67,8 +67,8 @@ const ConversationScreen = ({ route }) => {
       // Assurez-vous de remplacer ces valeurs par les informations pertinentes
       // pour l'envoi du message à votre API
       const messageText = newMessage;
-      const kineId = userData.kineId;
-      const patientId = userData.userId;
+      const kineId = userData.userId;
+      const patientId = userData.kineId;
      
 
       // Envoyez le message à votre API
@@ -76,7 +76,7 @@ const ConversationScreen = ({ route }) => {
         message: messageText,
         kine_id: kineId,
         patient_id: patientId,
-        role: 'patient',
+        role: 'kine',
       });
 
       // Rafraîchissez la conversation après avoir envoyé le message
@@ -103,15 +103,15 @@ const ConversationScreen = ({ route }) => {
             style={[
               styles.messageContainer,
               {
-                alignSelf: message.user === 'patient' ? 'flex-start' : 'flex-end',
-                backgroundColor: message.user === 'patient' ? 'blue' : 'white',
+                alignSelf: message.user === 'kine' ? 'flex-start' : 'flex-end',
+                backgroundColor: message.user === 'kine' ? 'blue' : 'white',
               },
             ]}
           >
             <Text style={[
               styles.messageText,
               {
-                color: message.user === 'patient' ? 'white' : 'black',
+                color: message.user === 'kine' ? 'white' : 'black',
               },
             ]}>
               {message.text}</Text>
@@ -189,4 +189,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ConversationScreen;
+export default ConversationScreenKine;

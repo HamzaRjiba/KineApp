@@ -17,7 +17,7 @@ const PaymentForm = () => {
 
   useEffect(() => {
     // Charger la liste des clients depuis votre API lorsque le composant est monté
-    fetch('http://192.168.1.9:8000/api/nompatients/6')
+    fetch('http://192.168.1.8:8000/api/nompatients/6')
       .then((response) => response.json())
       .then((data) => {
         setClientList(data);
@@ -36,7 +36,7 @@ const PaymentForm = () => {
     };
 
     // Effectuez une requête POST vers votre API avec les données du formulaire
-    fetch('http://192.168.1.9:8000/paiements', {
+    fetch('http://192.168.1.8:8000/paiements', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -150,7 +150,7 @@ const AddProgramScreen = () => {
       
       try {
         console.log(userData.userId);
-        const response = await fetch('http://192.168.1.9:8000/api/programAjout', {
+        const response = await fetch('http://192.168.1.8:8000/api/programAjout', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -175,10 +175,11 @@ const AddProgramScreen = () => {
           console.log(requestData);
           
             axios
-            .post('http://192.168.1.9:8000/api/tr', requestData)
+            .post('http://192.168.1.8:8000/api/tr', requestData)
             .then(response => {
             console.log(response.data);
             alert('programme ajouté avec succés');
+            navigation.navigate('ProgramScreen');
             })
            
          
@@ -341,7 +342,7 @@ const AddProgramScreen = () => {
             <Text style={styles.videoButtonText}>Choisir une vidéo</Text>
           </TouchableOpacity>
           {addOther && <Text style={styles.AddText}>{addOther}</Text>}
-          <Button title="Ajouter le programme" onPress={sendImageToApi} />
+          <Button title="Ajouter le programme" onPress={()=>sendImageToApi()} />
         </>
       )}
 

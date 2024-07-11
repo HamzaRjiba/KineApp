@@ -1,9 +1,11 @@
 import React, { useState,useEffect } from 'react';
 import { View, TextInput, Button, StyleSheet, Text, SafeAreaView, Image, TouchableOpacity } from 'react-native';
 import axios from 'axios';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SuperAlert from 'react-native-super-alert';
+import { BackHandler } from 'react-native';
+
 
 
 
@@ -15,6 +17,8 @@ import SuperAlert from 'react-native-super-alert';
 
 const LoginScreenKine = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [userData, setUserData] = useState({});
@@ -28,16 +32,39 @@ const LoginScreenKine = () => {
     setShowAlert(false);
   };
 
+  const exitApp = () => {
+    BackHandler.exitApp();
+  };
+
   useEffect(() => {
     fetchDataFromAsyncStorage();
+    console.log(userData);
+    const onBackPress = () => {
+      // Empêchez le retour en arrière en renvoyant true
+      return true;
+    };
+
+    // Ajoutez le gestionnaire d'événements BackHandler uniquement sur cet écran
+    BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+    // Nettoyez le gestionnaire lors du démontage de l'écran
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    };
+    
   }, []);
+
+  
 
   const fetchDataFromAsyncStorage = async () => {
     try {
       const storedData = await AsyncStorage.getItem('userData');
+      console.log(userData);
       if (storedData) {
         const parsedData = JSON.parse(storedData);
+       
         setUserData(parsedData);
+        
       }
     } catch (error) {
       console.error('Erreur lors de la récupération des données :', error);
@@ -51,34 +78,47 @@ const LoginScreenKine = () => {
     };
   
     axios
-      .post('http://192.168.1.9:8000/api/loginKine', requestData)
+      .post('http://192.168.1.8:8000/api/loginKine', requestData)
       .then(response => {
         // Connexion réussie, enregistrez les données dans AsyncStorage
         let userInfo = response.data.Kinesitherapeutes;
-       if(userInfo==null) {
-        userInfo = response.data.patients;
-        const updatedData = { ...userData, firstName: userInfo.nom, lastName: userInfo.prenom, userId:userInfo.id };
-        AsyncStorage.setItem('userData', JSON.stringify(updatedData));
-        setUserData(updatedData);
-       }
-       else{
-        const updatedData = { ...userData, firstName: userInfo.nom, lastName: userInfo.prenom, userId:userInfo.id };
-        AsyncStorage.setItem('userData', JSON.stringify(updatedData));
-        setUserData(updatedData);
-       }
-
+        let admin =response.data.admin;
+        console.log(userInfo);
+        console.log(admin);
+        if(userInfo==null && admin==null) {
+          userInfo = response.data.patients;
+          const updatedData = { ...userData, firstName: userInfo.nom, lastName: userInfo.prenom, userId:userInfo.id };
+          AsyncStorage.setItem('userData', JSON.stringify(updatedData));
+          setUserData(updatedData);
+         }
+         else if (userInfo!=null && admin==null) {
+          const updatedData = { ...userData, firstName: userInfo.nom, lastName: userInfo.prenom, userId:userInfo.id };
+          AsyncStorage.setItem('userData', JSON.stringify(updatedData));
+          setUserData(updatedData);
+         }
+         else if (admin!=null) {
+          userInfo = response.data.admin;
+          const updatedData = { ...userData, firstName: userInfo.email, lastName: userInfo.email, userId:userInfo.id };
+          AsyncStorage.setItem('userData', JSON.stringify(updatedData));
+          setUserData(updatedData);
+         }
+      
         
        
-   
+         if(admin!=null)  {
+          navigation.navigate('KinesitherapeuteList');
   
-       if(response.data.Kinesitherapeutes==null) {
+         }
+    
+       else if(response.data.Kinesitherapeutes==null) {
        
            navigation.navigate('HomePatient');
        }
-       else {
+       else if(response.data.Kinesitherapeutes!=null)  {
         navigation.navigate('Rdv');
 
        }
+      
            
       })
       .catch(error => {

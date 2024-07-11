@@ -111,7 +111,7 @@ const [rendezVousDataHist, setRendezVousDataHist] = useState([]);
   const deleteRendezVousById = async (rendezVousId) => {
     try {
       // Utilisez Axios pour effectuer une requête DELETE à votre API Symfony
-      const response = await axios.delete(`http://192.168.1.9:8000/rendez-vous-supp/${rendezVousId}`);
+      const response = await axios.delete(`http://192.168.1.8:8000/rendez-vous-supp/${rendezVousId}`);
   
       // Vérifiez si la suppression a réussi
       if (response.status === 200) {
@@ -175,8 +175,9 @@ const [rendezVousDataHist, setRendezVousDataHist] = useState([]);
   };
   const handleDocument = async () => {
     try {
-      const response = await axios.post('http://192.168.1.9:8000/insertdocument', documentData);
+      const response = await axios.post('http://192.168.1.8:8000/insertdocument', documentData);
       console.log('Réponse de l\'API :', response.data);
+      alert('Document ajouté avec succés');
       // Vous pouvez effectuer des actions supplémentaires en fonction de la réponse de l'API
     } catch (error) {
       console.error('Erreur lors de la requête vers l\'API :', error);
@@ -191,7 +192,7 @@ const [rendezVousDataHist, setRendezVousDataHist] = useState([]);
         setUserData(parsedData);
         console.log(parsedData.userId);
         axios
-          .get('http://192.168.1.9:8000/api/patients/' + parsedData.userId + '/rendez-vous')
+          .get('http://192.168.1.8:8000/api/patients/' + parsedData.userId + '/rendez-vous')
           .then((response) => {
             setRendezVousData(response.data.rendezVousAVenir);
             setRendezVousDataHist(response.data.rendezVousRestants)
@@ -209,12 +210,12 @@ const [rendezVousDataHist, setRendezVousDataHist] = useState([]);
     // Préparez les données à envoyer à l'API
     const rendezVousData = {
       id:rdv,
-     
+      statut:'confirmé',
     };
     
     // Effectuez une requête HTTP POST vers l'API
     axios
-      .post('http://192.168.1.9:8000/editstat', rendezVousData)
+      .post('http://192.168.1.8:8000/editstat', rendezVousData)
       .then((response) => {
         alert('Rendez-vous confirmé', response.data);
         // Vous pouvez effectuer des actions supplémentaires ici, comme fermer la modal

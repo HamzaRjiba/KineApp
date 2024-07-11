@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
 import NavBarPatient from './NavBarPatient';
 
-const apiUrl = 'http://192.168.1.9:8000/api/patientprog/3';
+const apiUrl = 'http://192.168.1.8:8000/api/patientprog/3';
 
 const ProgramPatient= () => {
   const [programmes, setProgrammes] = useState([]);
@@ -52,7 +52,7 @@ const ProgramPatient= () => {
         >
           <Text style={styles.programmeNom}>{item.nomprog}</Text>
           <Image
-            source={{ uri: 'http://192.168.1.9:8000/uploads/' + item.description }}
+            source={{ uri: 'http://192.168.1.8:8000/uploads/' + item.description }}
             style={styles.image}
           />
           <View>
@@ -115,7 +115,7 @@ const ProgramPatient= () => {
                   <Text>Series: {exercice.series}</Text>
                   <Video
                     source={{
-                      uri: 'http://192.168.1.9:8000/uploads/' + exercice.chemin,
+                      uri: 'http://192.168.1.8:8000/uploads/' + exercice.chemin,
                     }}
                     rate={1.0}
                     volume={1.0}

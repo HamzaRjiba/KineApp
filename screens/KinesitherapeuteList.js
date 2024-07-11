@@ -13,7 +13,7 @@ const KinesitherapeuteList = () => {
 
   useEffect(() => {
     // Faites une requête HTTP pour récupérer les données des kinésithérapeutes depuis votre API
-    Axios.get('http://192.168.1.9:8000/admin/listkine')
+    Axios.get('http://192.168.1.8:8000/admin/listkine')
       .then((response) => {
         setKinesitherapeutes(response.data);
       })
@@ -29,7 +29,7 @@ const KinesitherapeuteList = () => {
 
   const handleDeleteKine = (id) => {
     // Faites une requête DELETE pour supprimer le kinésithérapeute par son ID
-    Axios.delete(`http://192.168.1.9:8000/admin/supp/${id}`)
+    Axios.delete(`http://192.168.1.8:8000/admin/supp/${id}`)
       .then((response) => {
         alert('Kinésithérapeute supprimé avec succès');
         // Mettez à jour la liste des kinésithérapeutes en supprimant celui supprimé
@@ -61,7 +61,7 @@ const KinesitherapeuteList = () => {
       {kinesitherapeutes.map((kine) => (
         <View style={styles.kineContainer} key={kine.id}>
           <View style={styles.kineInfo}>
-            <Image source={{ uri: 'http://192.168.1.9:8000/uploads/' + kine.photo }} style={styles.kineImage} />
+            <Image source={{ uri: 'http://192.168.1.8:8000/uploads/' + kine.photo }} style={styles.kineImage} />
             <Text style={styles.kineName}>{kine.nom} {kine.prenom}</Text>
           </View>
           <View style={styles.buttonContainer}>
@@ -77,7 +77,7 @@ const KinesitherapeuteList = () => {
         <View style={styles.modalContent}>
          
           <ModalImage
-            source={{ uri: 'http://192.168.1.9:8000/uploads/' + selectedPiece }}
+            source={{ uri: 'http://192.168.1.8:8000/uploads/' + selectedPiece }}
             style={styles.modalImage}
             resizeMode="contain"
           />

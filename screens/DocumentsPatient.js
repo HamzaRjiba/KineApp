@@ -23,7 +23,7 @@ const DocumentsPatient = () => {
       if (storedData) {
         const parsedData = JSON.parse(storedData);
         setUserData(parsedData);
-        axios.post('http://192.168.1.9:8000/api/dossiers-medicaux-by-rendez-vous', {
+        axios.post('http://192.168.1.8:8000/api/dossiers-medicaux-by-rendez-vous', {
           id: parsedData.userId,
           rendezvous: [20, 21, 22] // Remplacez par les ID de vos rendez-vous
         })
@@ -86,7 +86,7 @@ const DocumentsPatient = () => {
       >
         <View style={styles.modalContent}>
           <Image
-            source={{ uri: 'http://192.168.1.9:8000/uploads/' + selectedImage }}
+            source={{ uri: 'http://192.168.1.8:8000/uploads/' + selectedImage }}
             style={styles.modalImage}
           />
           <TouchableOpacity

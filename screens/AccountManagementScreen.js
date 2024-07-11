@@ -107,7 +107,7 @@ const AccountManagementScreen = () => {
       if (storedData) {
         const parsedData = JSON.parse(storedData);
         setUserData(parsedData);
-        axios.get(`http://192.168.1.9:8000/kine/${parsedData.userId}`)
+        axios.get(`http://192.168.1.8:8000/kine/${parsedData.userId}`)
           .then((response) => {
             const responseData = response.data;
             setKineData(responseData);
@@ -137,7 +137,7 @@ const AccountManagementScreen = () => {
   const handleUpdateKine = async () => {
     try {
       // Remplacez l'URL par l'endpoint de votre API pour la modification du kiné
-      const response = await axios.put('http://192.168.1.9:8000/modifier-kine/'+userData.userId, updateData);
+      const response = await axios.put('http://192.168.1.8:8000/modifier-kine/'+userData.userId, updateData);
       console.log(updateData);
       if (response.status === 200) {
         // Generate a random integer with exactly four digits (range: 1000 to 9999)
@@ -166,7 +166,7 @@ const AccountManagementScreen = () => {
 
  
     try {
-      const apiUrl = 'http://192.168.1.9:8000/send-code'; // Replace with your API URL
+      const apiUrl = 'http://192.168.1.8:8000/send-code'; // Replace with your API URL
       const requestData = {
         code: code,
         mail: email,
@@ -190,7 +190,7 @@ const AccountManagementScreen = () => {
 
   const modifierEmailKine = async (email, code1, code2) => {
     try {
-      const apiUrl = 'http://192.168.1.9:8000/kinesitherapeutes/'+userData.userId+'/modifier-email'; // Remplacez par l'URL de votre API
+      const apiUrl = 'http://192.168.1.8:8000/kinesitherapeutes/'+userData.userId+'/modifier-email'; // Remplacez par l'URL de votre API
       console.log(apiUrl);
       const data = {
         email: codev.email,
@@ -215,7 +215,7 @@ const AccountManagementScreen = () => {
   };
   const handleDeleteKine = (id) => {
     // Faites une requête DELETE pour supprimer le kinésithérapeute par son ID
-    Axios.delete(`http://192.168.1.9:8000/admin/supp/${id}`)
+    Axios.delete(`http://192.168.1.8:8000/admin/supp/${id}`)
       .then((response) => {
         alert('Votre Compte a été supprimé avec succès');
         navigation.navigation.navigate('LoginScreenKine');

@@ -29,7 +29,7 @@ const PaymentListScreen = () => {
       if (storedData) {
         const parsedData = JSON.parse(storedData);
         setUserData(parsedData);
-        axios.get('http://192.168.1.9:8000/api/kine/'+parsedData.userId+'/paiements')
+        axios.get('http://192.168.1.8:8000/api/kine/'+parsedData.userId+'/paiements')
         .then((response) => {
           const startIndex = (currentPage - 1) * itemsPerPage;
           const endIndex = startIndex + itemsPerPage;

@@ -20,7 +20,7 @@ const StoreDataScreen = () => {
         telephoneK: '', 
         pieceK: '', 
         emailK: '' ,
-        lundi: '', 
+        ip: '192.168.1.8', 
         mardi: '', 
         mercredi: '', 
         jeudi: '', 

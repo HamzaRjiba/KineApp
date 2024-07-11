@@ -65,6 +65,9 @@ const SignupKine = () => {
       else if (validate(email)==false){
         alert('veuillez saisiir un email valide');
       }
+      else if(password.length<8){
+        alert('Le mot de passe doit contenir aux moins 8 caractères');
+      }
       else{
         setStep(step + 1);
       }
@@ -173,7 +176,7 @@ const SignupKine = () => {
       };
 
       // Envoyer les données à l'API Symfony
-      const response = await axios.post('http://192.168.1.9:8000/api/kinesitherapeutes/register', userData);
+      const response = await axios.post('http://192.168.1.8:8000/api/kinesitherapeutes/register', userData);
       console.log(response.data);
       // Vérifier si l'inscription a réussi
       if (response.status === 201) {
@@ -209,6 +212,9 @@ const SignupKine = () => {
       else if (validate(email)==false){
         alert('veuillez saisiir un email valide');
       }
+      else if(password.length<8){
+        alert('Le mot de passe doit contenir aux moins 8 caractères');
+      }
 
       else {
 
@@ -226,7 +232,7 @@ const SignupKine = () => {
       };
 
       // Envoyer les données à l'API Symfony
-      const response = await axios.post('http://192.168.1.9:8000/register_patient', userData);
+      const response = await axios.post('http://192.168.1.8:8000/register_patient', userData);
       console.log(response.data);
       // Vérifier si l'inscription a réussi
       if (response.status === 201) {

@@ -33,7 +33,7 @@ const SearchScreen = () => {
   };
   const handleSearch = async () => {
     try {
-      const response = await fetch('http://192.168.1.9:8000/api/search', {
+      const response = await fetch('http://192.168.1.8:8000/api/search', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ const SearchScreen = () => {
 
   const sendKineDataToApi = async (nom, prenom,photo) => {
     try {
-      const response = await fetch('http://192.168.1.9:8000/api/send-data', {
+      const response = await fetch('http://192.168.1.8:8000/api/send-data', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -108,7 +108,7 @@ const SearchScreen = () => {
       onPress={() => handleSelectKine(item)}
       style={styles.searchResult}
     >
-      <Image source={{ uri: `http://192.168.1.9:8000/uploads/${item.photo}` }} style={styles.image} />
+      <Image source={{ uri: `http://192.168.1.8:8000/uploads/${item.photo}` }} style={styles.image} />
       <View style={styles.details}>
         <Text style={styles.text}>Nom: {item.nom}</Text>
         <Text style={styles.text}>Prénom: {item.prenom}</Text>

@@ -33,6 +33,7 @@ import ListPatients from './screens/ListPatients';
 import AccountManagementScreen from './screens/AccountManagementScreen';
 import KinesitherapeuteList from './screens/KinesitherapeuteList';
 import SuperAlert from "react-native-super-alert";
+import ConversationScreenKine from './screens/ConversationScreenKine';
   const Stack = createNativeStackNavigator(); 
   export default function App() {
      return (
@@ -44,7 +45,8 @@ import SuperAlert from "react-native-super-alert";
       <Stack.Navigator screenOptions={{ headerShown: false}}>
 
       <Stack.Screen name="WelcomeScreen" component={WelcomeScreen}/>
-      <Stack.Screen name="KinesitherapeuteList" component={KinesitherapeuteList}/>
+      <Stack.Screen name="KinesitherapeuteList" component={KinesitherapeuteList}
+       options={{ headerShown: true, title: 'Listes des kinés' }}/>
 
       <Stack.Screen name="LoginScreenKine" component={LoginScreenKine}/>
       <Stack.Screen name="ProgramPatient" component={ProgramPatient}/>
@@ -64,7 +66,10 @@ import SuperAlert from "react-native-super-alert";
 
       <Stack.Screen name="StoreDataScreen" component={StoreDataScreen}/>
 
-      <Stack.Screen name="ConversationScreen" component={ConversationScreen}/>
+      <Stack.Screen name="ConversationScreen" component={ConversationScreen}  
+      options={{ headerShown: true, title: 'Conversation' }}/>
+       <Stack.Screen name="ConversationScreenKine" component={ConversationScreenKine}  
+      options={{ headerShown: true, title: 'Conversation' }}/>
 
 
       <Stack.Screen name="PaymentListScreen" component={PaymentListScreen}/>

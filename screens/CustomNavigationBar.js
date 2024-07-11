@@ -30,22 +30,22 @@ const CustomNavigationBar = () => {
 
   return (
     <View style={styles.navigationBar}>
-      <TouchableOpacity style={styles.navItem} onPress={handleButtonPress}>
+      <TouchableOpacity style={styles.navItem} onPress={() =>handleButtonPress()}>
         <Icon name="home" size={25} color="black" style={styles.navIcon} />
         <Text style={styles.navText}>Accueil</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.navItem} onPress={handleButtonRdv}>
+      <TouchableOpacity style={styles.navItem} onPress={() =>handleButtonRdv()}>
         <Icon name="calendar" size={25} color="black" style={styles.navIcon} />
         <Text style={styles.navText}>Rendez-vous</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.navItem} onPress={handleButtonProg}>
+      <TouchableOpacity style={styles.navItem} onPress={() =>handleButtonProg()}>
         <Icon name="walking" size={25} color="black" style={styles.navIcon} />
         <Text style={styles.navText}>Programmes</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.navItem} onPress={handleButtonPaiement}>
+      <TouchableOpacity style={styles.navItem} onPress={() =>handleButtonPaiement()}>
       <FontAwesome5 name="money-bill-wave"   size={25} color="black" style={styles.navIcon} />
         <Text style={styles.navText}>paiement</Text>
       </TouchableOpacity>

@@ -17,7 +17,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
-const apiUrl = 'http://192.168.1.9:8000/api/kineprog/6';
+const apiUrl = 'http://192.168.1.8:8000/api/kineprog/6';
 
 const ProgrammesScreen = () => {
   const [programmes, setProgrammes] = useState([]);
@@ -73,7 +73,7 @@ const ProgrammesScreen = () => {
       temps:temps,
       
     };
-    axios.put('http://192.168.1.9:8000/api/programmes/'+idProg, ProgramData)
+    axios.put('http://192.168.1.8:8000/api/programmes/'+idProg, ProgramData)
     .then(response => {
       console.log(response.data);
       alert('programme modifié');
@@ -92,8 +92,8 @@ const ProgrammesScreen = () => {
 
     setIdProg(id);
     alert(
-      'Hello!!', // This is a title
-      "This is a Super Alert", // This is a alert message
+      'suppression', // This is a title
+      "Etes vous sures de supprimer ce programme?", // This is a alert message
       {
           textConfirm: 'Confirm', // Label of button confirm
           textCancel: 'Cancel', // Label of button cancel
@@ -107,7 +107,7 @@ const ProgrammesScreen = () => {
   }
   const deleteProgramme = async (programmeId) => {
     try {
-      const response = await axios.delete(`http://192.168.1.9:8000/programme/supp/${programmeId}`);
+      const response = await axios.delete(`http://192.168.1.8:8000/programme/supp/${programmeId}`);
       if (response.status === 200) {
        alert('Le programme a été supprimé avec succès.');
        fetchDataFromAsyncStorage();
@@ -153,7 +153,7 @@ const ProgrammesScreen = () => {
         setUserData(parsedData);
         const fetchProgrammes = async () => {
           try {
-            const response = await fetch('http://192.168.1.9:8000/api/kineprog/'+parsedData.userId);
+            const response = await fetch('http://192.168.1.8:8000/api/kineprog/'+parsedData.userId);
             const data = await response.json();
             setProgrammes(data);
           } catch (error) {
@@ -170,10 +170,11 @@ const ProgrammesScreen = () => {
 
   const handleDeleteEx= (id) => {
     // Faites une requête DELETE pour supprimer le kinésithérapeute par son ID
-    axios.delete(`http://192.168.1.9:8000/ex/supp/${id}`)
+    axios.delete(`http://192.168.1.8:8000/ex/supp/${id}`)
       .then((response) => {
         alert('Excercice supprimé avec succès');
         fetchDataFromAsyncStorage();
+        setSelectedProgramme(null);
         
       })
       .catch((error) => {
@@ -222,7 +223,7 @@ const ProgrammesScreen = () => {
               <Icon name="trash" size={20} color="red" />
             </TouchableOpacity></Text>
           <Image
-            source={{ uri: 'http://192.168.1.9:8000/uploads/' + item.description }}
+            source={{ uri: 'http://192.168.1.8:8000/uploads/' + item.description }}
             style={styles.image}
           />
           <View>
@@ -302,7 +303,7 @@ const ProgrammesScreen = () => {
                   
                   <Video
                     source={{
-                      uri: 'http://192.168.1.9:8000/uploads/' + exercice.chemin,
+                      uri: 'http://192.168.1.8:8000/uploads/' + exercice.chemin,
                     }}
                     rate={1.0}
                     volume={1.0}

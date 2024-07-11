@@ -21,7 +21,6 @@ const LoginScreen = () => {
       const storedData = await AsyncStorage.getItem('userData');
       if (storedData) {
         const parsedData = JSON.parse(storedData);
-        setUserData(parsedData);
       }
     } catch (error) {
       console.error('Erreur lors de la récupération des données :', error);

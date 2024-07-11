@@ -7,14 +7,31 @@ import Swiper from 'react-native-swiper/src';
 import CustomNavigationBar from './CustomNavigationBar';
 import { useNavigation } from '@react-navigation/native';
 import { useUser  } from './UserContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 
 
 
 const HomePatient = () => {
+  const fetchDataFromAsyncStorage = async () => {
+    try {
+      const storedData = await AsyncStorage.getItem('userData');
+      if (storedData) {
+        const parsedData = JSON.parse(storedData);
+        setUserData(parsedData);
+        
+      }
+    } catch (error) {
+      console.error('Erreur lors de la récupération des données :', error);
+    }
+  };
   const { getName, setName } = useUser();
 
   const handleButtonKine= () => {
+    const updatedData = { ...userData, firstName: '', lastName: '', userId:'' };
+    AsyncStorage.setItem('userData', JSON.stringify(updatedData));
+    setUserData(updatedData);
     navigation.navigate('LoginScreenKine');
     
   };
@@ -37,6 +54,8 @@ const HomePatient = () => {
   const [fontLoaded, setFontLoaded] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
   const navigation = useNavigation();
+  const [userData, setUserData] = useState({});
+
   const handleButtonSearch = () => {
     navigation.navigate('SearchScreen');
   };
@@ -54,6 +73,7 @@ const HomePatient = () => {
 
   useEffect(() => {
     loadFonts();
+    fetchDataFromAsyncStorage() ;
   }, []);
 
   if (!fontLoaded) {
@@ -110,7 +130,7 @@ const HomePatient = () => {
           <Menu.Item onPress={handleButtonPat} title="Mes patients" />
         </Menu>
         <Text style={styles.knetunText}>KinéPro</Text>
-        <TouchableOpacity style={styles.connectButton} onPress={handleButtonKine}>
+        <TouchableOpacity style={styles.connectButton} onPress={()=>handleButtonKine()}>
           <Text style={styles.connectText}>Se déconnecter</Text>
         </TouchableOpacity>
       </View>

@@ -79,11 +79,11 @@ const handleAnuuler = (rdv) => {
       if (storedData) {
         const parsedData = JSON.parse(storedData);
         setUserData(parsedData);
-        axios.get(`http://192.168.1.9:8000/kine/${parsedData.userId}/rendez-vous`)
+        console.log(parsedData);
+        axios.get(`http://192.168.1.8:8000/kine/${parsedData.userId}/rendez-vous`)
           .then((response) => {
             const responseData = response.data;
             const rendezVousAVenir = responseData.rendezVousAVenir;
-            console.log(rendezVousAVenir);
             const rendezVousHistorique = responseData.rendezVousRestants;
             setRendezVousData(rendezVousAVenir);
             setRendezVousDataHist(rendezVousHistorique);
@@ -99,6 +99,17 @@ const handleAnuuler = (rdv) => {
       setRefreshing(false);
     }
   };
+  const getCurrentDate = () => {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Mois commence à 0, donc ajoutez 1
+    const day = currentDate.getDate().toString().padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
+  
+    return formattedDate;
+  };
+  const currentDate = getCurrentDate();
+console.log(currentDate);
 
   const sendConfirm = (rdv) => {
     // Préparez les données à envoyer à l'API
@@ -110,7 +121,7 @@ const handleAnuuler = (rdv) => {
     
     // Effectuez une requête HTTP POST vers l'API
     axios
-      .post('http://192.168.1.9:8000/editstat', rendezVousData)
+      .post('http://192.168.1.8:8000/editstat', rendezVousData)
       .then((response) => {
         alert('Rendez-vous confirmé', response.data);
         // Vous pouvez effectuer des actions supplémentaires ici, comme fermer la modal
@@ -169,10 +180,14 @@ const handleAnuuler = (rdv) => {
       horairenew: selectedHoraire,
     };
     // Effectuez une requête HTTP POST vers l'API
+    if(format(selectedDate, 'yyyy-MM-dd')<currentDate){
+      alert('cette date est passé');
+    }
+    else{
     axios
-      .post('http://192.168.1.9:8000/' + idrdv + '/editrend', rendezVousData)
+      .post('http://192.168.1.8:8000/' + idrdv + '/editrend', rendezVousData)
       .then((response) => {
-        alert('Rendez-vous modifié avec succès', response.data);
+        alert( response.data);
         setIsRefreshing(true);
 
         toggleModal();
@@ -180,8 +195,8 @@ const handleAnuuler = (rdv) => {
 
       })
       .catch((error) => {
-        console.error('Erreur lors de la création du rendez-vous :', error);
-      });
+        console.error('Erreur lors de la modification du rendez-vous :', error);
+      });}
   };
 
   const handleNextPage = () => {
@@ -207,7 +222,7 @@ const handleAnuuler = (rdv) => {
     
     // Effectuez une requête HTTP POST vers l'API
     axios
-      .post('http://192.168.1.9:8000/editstat', rendezVousData)
+      .post('http://192.168.1.8:8000/editstat', rendezVousData)
       .then((response) => {
         alert('absence ajoutée', response.data);
         // Vous pouvez effectuer des actions supplémentaires ici, comme fermer la modal
@@ -222,7 +237,7 @@ const handleAnuuler = (rdv) => {
 
   const HandleDocument = (id) => {
     axios
-      .post('http://192.168.1.9:8000/api/document', {
+      .post('http://192.168.1.8:8000/api/document', {
         id: id,
         rendezvous: [20, 21, 22] // Remplacez par les ID de vos rendez-vous
       })
@@ -250,7 +265,7 @@ const handleAnuuler = (rdv) => {
   const deleteRendezVousById = async (rendezVousId) => {
     try {
       // Utilisez Axios pour effectuer une requête DELETE à votre API Symfony
-      const response = await axios.delete(`http://192.168.1.9:8000/rendez-vous-supp/${rendezVousId}`);
+      const response = await axios.delete(`http://192.168.1.8:8000/rendez-vous-supp/${rendezVousId}`);
   
       // Vérifiez si la suppression a réussi
       if (response.status === 200) {
@@ -260,10 +275,13 @@ const handleAnuuler = (rdv) => {
         fetchDataFromAsyncStorage();
 
       } else {
+        alert('Impossible de supprimer le rendez-vous, moins de 12 heures avant l\'heure du rendez-vous');
         console.error('Erreur lors de la suppression du rendez-vous');
       }
     } catch (error) {
-      console.error('Une erreur s\'est produite : ', error);
+      alert('Impossible de supprimer le rendez-vous, moins de 12 heures avant l\'heure du rendez-vous');
+
+      
     }
   };
 
@@ -328,7 +346,7 @@ const handleAnuuler = (rdv) => {
                   </View>
 
                   <View style={styles.kineBar}>
-                    <Image source={{ uri: 'http://192.168.1.9:8000/uploads/'+item.patient.photo }} style={styles.kineImage} />
+                    <Image source={{ uri: 'http://192.168.1.8:8000/uploads/'+item.patient.photo }} style={styles.kineImage} />
                     <View style={styles.kineInfo}>
                       <Text style={styles.kineName}>{item.patient.nom} {item.patient.prenom}</Text>
                       <Text style={styles.kineJob}>{item.statut}</Text>
@@ -343,6 +361,25 @@ const handleAnuuler = (rdv) => {
                       <TouchableOpacity style={styles.confirmationButton} onPress={()=> sendConfirm(item.id)}  >
                         <Icon name="check" size={20} color="green" />
                       </TouchableOpacity>
+                      <TouchableOpacity style={styles.deleteButton} onPress={()=> handleConfirm(item.id)}>
+                        <Icon name="trash" size={20} color="red" />
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.reportButton}onPress={() => toggleModal(item.id)}>
+                        <Text style={styles.reportButtonText}>Reporter</Text>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                   {item.statut === 'reported' && (
+                    <View style={styles.iconButtonsContainer} >
+                      <TouchableOpacity style={styles.deleteButton} onPress={()=> handleConfirm(item.id)}>
+                        <Icon name="trash" size={20} color="red" />
+                      </TouchableOpacity>
+                     
+                    </View>
+                  )}
+                   {item.statut === 'confirmé' && (
+                    <View style={styles.iconButtonsContainer} >
+                      
                       <TouchableOpacity style={styles.deleteButton} onPress={()=> handleConfirm(item.id)}>
                         <Icon name="trash" size={20} color="red" />
                       </TouchableOpacity>
@@ -410,7 +447,7 @@ const handleAnuuler = (rdv) => {
                   </View>
 
                   <View style={styles.kineBar}>
-                    <Image source={{ uri: 'http://192.168.1.9:8000/uploads/'+item.patient.photo }} style={styles.kineImage} />
+                    <Image source={{ uri: 'http://192.168.1.8:8000/uploads/'+item.patient.photo }} style={styles.kineImage} />
                     <View style={styles.kineInfo}>
                       <Text style={styles.kineName}>{item.patient.nom} {item.patient.prenom}</Text>
                       <Text style={styles.kineJob}>{item.statut}</Text>
@@ -543,7 +580,7 @@ const handleAnuuler = (rdv) => {
     {documentData.length > 0 ? (
       <View>
         <Image
-          source={{ uri: 'http://192.168.1.9:8000/uploads/' + documentData[currentDocumentPage].document }}
+          source={{ uri: 'http://192.168.1.8:8000/uploads/' + documentData[currentDocumentPage].document }}
           style={styles.modalImage}
         />
       </View>
